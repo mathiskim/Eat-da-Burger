@@ -21,7 +21,6 @@ router.get("/index", function(req, res) {
 
 // insert the user's burger name and set the devoured flag to false and go back to the home page
 router.post("/burgers/insertOne", function(req, res) {
-  console.log(req);
 
   burger.insertOne(
     ["burger_name", "devoured"],
