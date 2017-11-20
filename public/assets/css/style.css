@@ -1,18 +1,32 @@
-html {
+body {
 	background-color: #f29c29;	
 }
 
 li {
   padding: 5px;
   margin: 5px;
-  background: white;
+  list-style-type: none;
+  background: blue;
+  color: white;
+  border-color: red;
+  border-width: 5px;  
+}
+
+img {
+  width: 100%;
+  max-width: 200px;
 }
 
 .label {
   font-weight: bold;
 }
 
-.create-update-form {
+.top-line {
+  font-weight: bold;
+  text-align: center;
+}
+
+.create-form {
   padding: 5px;
   margin: 5px;
   background: aqua;

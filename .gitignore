@@ -1,1 +1,3 @@
 node_modules
+**/Dont_use*
+*.bk

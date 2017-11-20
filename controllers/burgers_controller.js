@@ -1,59 +1,44 @@
 var express = require("express");
-
 var router = express.Router();
+// Import the model (burger.js) to use its database functions.
+var burger = require("../models/burger.js");
 
-// Import the model (cat.js) to use its database functions.
-var cat = require("../models/burger.js");
-
-// Create all our routes and set up logic within those routes where required.
+//when page is first hit, redirect to /index to select all the burgers and 
+//display them using index.handlebars
 router.get("/", function(req, res) {
-  cat.all(function(data) {
+  res.redirect('/index');
+});
+
+// select all the burgers and display them using index.handlebars
+router.get("/index", function(req, res) {
+  burger.all(function(data) {
     var hbsObject = {
-      cats: data
+      burgers: data
     };
-    console.log(hbsObject); 
     res.render("index", hbsObject);
   });
 });
 
-router.post("/api/cats", function(req, res) {
-  cat.create([
-    "name", "sleepy"
-  ], [
-    req.body.name, req.body.sleepy
-  ], function(result) {
-    // Send back the ID of the new quote
-    res.json({ id: result.insertId });
-  });
+// insert the user's burger name and set the devoured flag to false and go back to the home page
+router.post("/burgers/insertOne", function(req, res) {
+  console.log(req);
+
+  burger.insertOne(
+    ["burger_name", "devoured"],
+    [req.body.name, false],
+    function(result) {
+      res.redirect('/index');
+    }
+  );
 });
 
-router.put("/api/cats/:id", function(req, res) {
+// update the devoured flag for the burger the user clicked on and go back to the home page
+ router.put("/burgers/updateOne/:id", function(req, res) {
   var condition = "id = " + req.params.id;
-
-  console.log("condition", condition);
-
-  cat.update({
-    sleepy: req.body.sleepy
-  }, condition, function(result) {
-    if (result.changedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
-    }
-  });
-});
-
-router.delete("/api/cats/:id", function(req, res) {
-  var condition = "id = " + req.params.id;
-
-  cat.delete(condition, function(result) {
-    if (result.affectedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
-    }
+  burger.updateOne({
+    devoured: req.body.devoured
+  }, condition, function() {    
+       res.redirect("/index");
   });
 });
 
